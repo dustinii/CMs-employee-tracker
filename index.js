@@ -1,12 +1,13 @@
 // Entryy point for the application and contains the logic for the CLI
 const { prompt } = require('inquirer');
-const db = require('./db');
+const db = require('./db/index');
 
 // Start the application
 init();
 
 // Prompt the user for what action they should take
 function init() {
+    console.log("Hi, Human. I am your employee database. I will help you keep track of your employees. I am your friend.")
     loadMainPrompts();
 }
 

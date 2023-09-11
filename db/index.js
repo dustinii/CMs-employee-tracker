@@ -1,7 +1,7 @@
 const connection = require("./connection");
 
 // EmployeeDB, RoleDB, and DepartmentDB classes
-class EmployeeDB {
+class DB {
     constructor(connection) {
         this.connection = connection;
     }
@@ -30,19 +30,11 @@ class EmployeeDB {
     // Find all employees except the given employee id
     findAllPossibleManagers(employeeId) {
         return this.connection.promise().query(
-            `
-            SELECT
-                id,
-                first_name,
-                last_name
-            FROM
-                employee
-            WHERE
-                id != ?
-            `, employeeId
-        )
-    }
-    
+          "SELECT id, first_name, last_name FROM employee WHERE id != ?",
+          employeeId
+        );
+      }
+
     createEmployee(employee) {
         return this.connection.promise().query(
             `
@@ -95,68 +87,71 @@ class EmployeeDB {
     }
 
     findAllEmployeesByManager(managerId) {
-        return this.connection.promise().query()
+        return this.connection.promise().query(
             `
         SELECT employee.id, employee.first_name, employee.last_name, DEPARTMENT.name AS department, role.title
         FROM employee
         LEFT JOIN role ON employee.role_id = role.id
         LEFT JOIN department ON role.department_id = department.id
         WHERE employee.manager_id = ?;
-        `,
-            managerId
-    }
-}
-class RoleDB {
-    constructor(connection) {
-        this.connection = connection;
-    }
-
-    findAllRoles() {
-        return this.connection.promise().query(
-            "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
-        );
-    }
-
-    createRole(role) {
-        return this.connection.promise().query("INSERT INTO role SET ?", role);
-    }
-
-    removeRole(roleId) {
-        return this.connection.promise().query("DELETE FROM role WHERE id = ?", roleId);
+        `, managerId
+        )
     }
 }
 
-class DepartmentDB {
-    constructor(connection) {
-        this.connection = connection;
-    }
+// class RoleDB {
+//     constructor(connection) {
+//         this.connection = connection;
+//     }
 
-    findAllDepartments() {
-        return this.connection.promise().query(
-            "SELECT department.id, department.name FROM department;"
-        );
-    }
+//     findAllRoles() {
+//         return this.connection.promise().query(
+//             "SELECT role.id, role.title, department.name AS department, role.salary FROM role LEFT JOIN department on role.department_id = department.id;"
+//         );
+//     }
 
-    viewDepartmentBudgets() {
-        return this.connection.promise().query(
-            "SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
-        );
-    }
+//     createRole(role) {
+//         return this.connection.promise().query("INSERT INTO role SET ?", role);
+//     }
 
-    createDepartment(department) {
-        return this.connection.promise().query("INSERT INTO department SET ?", department);
-    }
+//     removeRole(roleId) {
+//         return this.connection.promise().query("DELETE FROM role WHERE id = ?", roleId);
+//     }
+// }
 
-    removeDepartment(departmentId) {
-        return this.connection.promise().query(
-            "DELETE FROM department WHERE id = ?", departmentId
-        );
-    }
-}
+// class DepartmentDB {
+//     constructor(connection) {
+//         this.connection = connection;
+//     }
+
+//     findAllDepartments() {
+//         return this.connection.promise().query(
+//             "SELECT department.id, department.name FROM department;"
+//         );
+//     }
+
+//     viewDepartmentBudgets() {
+//         return this.connection.promise().query(
+//             "SELECT department.id, department.name, SUM(role.salary) AS utilized_budget FROM employee LEFT JOIN role on employee.role_id = role.id LEFT JOIN department on role.department_id = department.id GROUP BY department.id, department.name;"
+//         );
+//     }
+
+//     createDepartment(department) {
+//         return this.connection.promise().query("INSERT INTO department SET ?", department);
+//     }
+
+//     removeDepartment(departmentId) {
+//         return this.connection.promise().query(
+//             "DELETE FROM department WHERE id = ?", departmentId
+//         );
+//     }
+// }
 
 // Export employee, role, and department classes
-module.exports = {
-    Employee: new EmployeeDB(connection),
-    Role: new RoleDB(connection),
-    Department: new DepartmentDB(connection)
-};
+// module.exports = {
+//     Employee: new EmployeeDB(connection),
+//     Role: new RoleDB(connection),
+//     Department: new DepartmentDB(connection)
+// };
+
+module.exports = new DB(connection);
