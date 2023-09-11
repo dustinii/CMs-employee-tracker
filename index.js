@@ -1,12 +1,16 @@
+// Entryy point for the application and contains the logic for the CLI
 const { prompt } = require('inquirer');
 const db = require('./db');
 
+// Start the application
 init();
 
+// Prompt the user for what action they should take
 function init() {
     loadMainPrompts();
 }
 
+// Prompt the user what they want to do
 async function loadMainPrompts() {
     const { choice } = await prompt({
         type: 'list',
@@ -124,6 +128,7 @@ async function loadMainPrompts() {
     }
 };
 
+// returns a list of all employees
 async function viewEmployees() { 
     const [rows] = await db.findAllEmployees();
     console.log("\n");
@@ -131,6 +136,7 @@ async function viewEmployees() {
     loadMainPrompts();
 };
 
+// returns a list of all employees by manager
 async function viewEmployeesByManager() { 
     const managers = await db.findAllManagers();
     const { managerId } = await prompt({
@@ -144,6 +150,8 @@ async function viewEmployeesByManager() {
     loadMainPrompts();
 };
 
+
+// returns a list of all employees by department
 async function viewEmployeesByDepartment() { 
     const departments = await db.findAllDepartments();
     const { departmentId } = await prompt({
@@ -157,6 +165,7 @@ async function viewEmployeesByDepartment() {
     loadMainPrompts();
 };
 
+// adds an employee to the database
 async function addEmployee() { 
     const roles = await db.findAllRoles();
     const managers = await db.findAllManagers();
@@ -171,6 +180,7 @@ async function addEmployee() {
     loadMainPrompts();
 };
 
+//  removes an employee from the database
 async function removeEmployee() { 
     const employees = await db.findAllEmployees();
     const { employeeId } = await prompt({
@@ -184,12 +194,14 @@ async function removeEmployee() {
     loadMainPrompts();
 };
 
+// returns a list of all departments
 async function viewDepartments() { 
     const departments = await db.findAllDepartments();
     console.table(departments);
     loadMainPrompts();
 }
 
+// adds a department to the database
 async function addDepartment() { 
     const { departmentName } = await prompt({
         type: "input",
@@ -201,6 +213,7 @@ async function addDepartment() {
     loadMainPrompts();
 };
 
+// removes a department from the database
 async function removeDepartment() { 
     const departments = await db.findAllDepartments();
     const { departmentId } = await prompt({
@@ -214,11 +227,14 @@ async function removeDepartment() {
     loadMainPrompts();
 };
 
+//  returns a list of all roles
 async function viewRoles() { 
     const roles = await db.findAllRoles();
     console.table(roles);
     loadMainPrompts();
 };
+
+// adds a role to the database
 async function addRole() { 
     const departments = await db.findAllDepartments();
     const { title, salary, departmentId } = await prompt([
@@ -230,6 +246,8 @@ async function addRole() {
     console.log("Role added successfully!");
     loadMainPrompts();
 };
+
+// removes a role from the database
 async function removeRole() { 
     const roles = await db.findAllRoles();
     const { roleId } = await prompt({
@@ -243,6 +261,7 @@ async function removeRole() {
     loadMainPrompts();
 };
 
+// updates an employee's manager
 async function updateEmployeeManager() { 
     const employees = await db.findAllEmployees();
     const managers = await db.findAllManagers();
@@ -255,6 +274,7 @@ async function updateEmployeeManager() {
     loadMainPrompts();
 };
 
+// updates an employee's role
 async function updateEmployeeRole() { 
     const employees = await db.findAllEmployees();
     const roles = await db.findAllRoles();
@@ -267,6 +287,7 @@ async function updateEmployeeRole() {
     loadMainPrompts();
 };
 
+// returns the budget of a department
 async function viewBudgetByDepartment() {
     const departments = await db.findAllDepartments();
     const { departmentId } = await prompt({
@@ -281,6 +302,7 @@ async function viewBudgetByDepartment() {
     loadMainPrompts();
 }
 
+// exits the application
 function quit() {
     console.log("Peace out, cutie patootie!");
     process.exit();

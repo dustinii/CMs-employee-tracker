@@ -1,5 +1,6 @@
 const connection = require("./connection");
 
+// EmployeeDB, RoleDB, and DepartmentDB classes
 class EmployeeDB {
     constructor(connection) {
         this.connection = connection;
@@ -26,6 +27,7 @@ class EmployeeDB {
         )
     }
 
+    // Find all employees except the given employee id
     findAllPossibleManagers(employeeId) {
         return this.connection.promise().query(
             `
@@ -40,7 +42,7 @@ class EmployeeDB {
             `, employeeId
         )
     }
-
+    
     createEmployee(employee) {
         return this.connection.promise().query(
             `
@@ -152,7 +154,7 @@ class DepartmentDB {
     }
 }
 
-
+// Export employee, role, and department classes
 module.exports = {
     Employee: new EmployeeDB(connection),
     Role: new RoleDB(connection),
