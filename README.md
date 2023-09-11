@@ -8,12 +8,19 @@ A robust database management system for tracking employees, roles, and departmen
 
 ## Table of Contents
 
+- [Technologies](#technologies)
 - [Description](#description)
 - [Installation](#installation)
 - [Usage](#usage)
 - [License](#license)
 - [Contributing](#contributing)
 - [Questions](#questions)
+
+## Technologies
+
+ **Node.js**: As the runtime environment to execute our server-side JavaScript code.
+ **MySQL**: Used as the relational database to store, retrieve, and manage the data.
+ **Inquirer**: Provides an interactive command line user interface.
 
 ## Description
 
